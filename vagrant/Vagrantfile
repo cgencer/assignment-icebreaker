@@ -1,32 +1,13 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
 Vagrant.configure("2") do |config|
-  # The most common configuration options are documented and commented below.
-  # For a complete reference, please see the online documentation at
-  # https://docs.vagrantup.com.
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "centos/7"
-  # Disable automatic box update checking. If you disable this, then
-  # boxes will only be checked for updates when the user runs
-  # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
+  config.vm.box = "kuikui/modern-lamp"
+  # From: https://app.vagrantup.com/kuikui/boxes/modern-lamp
+  # Uses:
+  # Debian, PHP, MySQL, Apache, Redis, RabbitMQ, Node.js
 
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine. In the example below,
-  # accessing "localhost:8080" will access port 80 on the guest machine.
-  # NOTE: This will enable public access to the opened port
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
-
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine and only allow access
-  # via 127.0.0.1 to disable public access
   config.vm.network "forwarded_port", guest: 5432, host: 5432, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 80, host: 8080       # web /if any
   config.vm.network "forwarded_port", guest: 4040, host: 4040     # ngrok interface
@@ -61,11 +42,8 @@ Vagrant.configure("2") do |config|
   # View the documentation for the provider you are using for more
   # information on available options.
 
-  # Enable provisioning with a shell script. Additional provisioners such as
-  # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
-  # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+     apt-get update
+     apt-get install -y apache2
+  SHELL
 end

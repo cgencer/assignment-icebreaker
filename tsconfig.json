@@ -11,7 +11,8 @@
     "experimentalDecorators": true,
     "outDir": "./dist"
   },
-  "include": ["src/**/*.json"],
+  "include": ["src/**/*", "src/**/*.json"],
+  "exclude": ["**/*.spec.ts"],
   "hooks": [
     "copy-files"
   ],

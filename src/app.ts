@@ -16,6 +16,16 @@ import { authRoutes } from './routes/auth.js';
 import { userRoutes } from './routes/user.js';
 import { contentRoutes } from './routes/content.js';
 
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from 'src/app.module';
+import { Module } from '@nestjs/common';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { AppModule } from './app.module';
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { CoinService } from './coins/coins.service';
+
 import { errorHandler } from "./helpers/error.mw.js";
 import { notFoundHandler } from "./helpers/not-found.mw.js";
 //import routes from './routes/index.js';
@@ -71,6 +81,25 @@ export default class App {
   			console.log(`::: the API is avail@ http://localhost:${config.port}`);
 			console.log(':::--------------------------------');
 		});
+
+		// https://semaphoreci.com/blog/microservices-nestjs-grpc
+		async function bootstrap() {
+			const app = await NestFactory.createMicroservice(AppModule, {
+				transport: Transport.GRPC,
+				options: {
+					url: 'localhost:5000',
+					package: 'coins',
+					protoPath: './coins.proto',
+				},
+			});
+  			await app.listen();
+			console.log('Microservice listening on port:', port);
+		}
+		bootstrap();
+
+
+
+
 	}
 }
 new App();
